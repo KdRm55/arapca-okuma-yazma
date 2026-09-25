@@ -18,7 +18,10 @@ import {
   FileText,
   HelpCircle,
   XCircle,
-  Award
+  Award,
+  Maximize2,
+  Minimize2,
+  Hand
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -92,6 +95,14 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   // Tracing Stages: 'shadow' (Önce gölgeden git) vs 'free' (Sonra kendin yaz)
   const [tracingStage, setTracingStage] = useState<TracingStage>('shadow');
   const [showGuide, setShowGuide] = useState<boolean>(true);
+
+  // Touch Mode: 'draw' (Çizim Yap) vs 'scroll' (Sayfayı Rahat Kaydır)
+  const [touchMode, setTouchMode] = useState<'draw' | 'scroll'>('draw');
+  const touchModeRef = useRef<'draw' | 'scroll'>('draw');
+  touchModeRef.current = touchMode;
+
+  // Fullscreen / Odak Modu: Ekranı kaplayan ferah yazı tahtası
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   // Drawing tools
   const [activeColor, setActiveColor] = useState<string>(COLORS[0].value);
@@ -269,7 +280,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   const redrawRef = useRef<() => void>(() => {});
   redrawRef.current = redraw;
 
-  // Resize canvas when container size changes with mobile-first proportions
+  // Resize canvas when container size changes with generous proportions
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -280,10 +291,13 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
 
     const isMobile = window.innerWidth < 640;
     const targetWidth = Math.max(Math.floor(rect.width), 260);
-    // On mobile screens, constrain canvas height so toolbar & check buttons fit in viewport
-    const targetHeight = isMobile
-      ? Math.max(Math.min(Math.floor(targetWidth * 0.58), 240), 200)
-      : Math.max(Math.floor(Math.min(targetWidth * 0.72, 420)), 280);
+    // On mobile screens, provide generous height (280-360px) so it never feels cramped / narrow
+    // When in fullscreen mode, expand to fill the entire mobile screen
+    const targetHeight = isFullscreen
+      ? Math.max(window.innerHeight - (isMobile ? 210 : 250), 360)
+      : (isMobile
+          ? Math.max(Math.min(Math.floor(targetWidth * 0.85), 360), 280)
+          : Math.max(Math.floor(Math.min(targetWidth * 0.72, 450)), 320));
 
     const pixelW = Math.floor(targetWidth * dpr);
     const pixelH = Math.floor(targetHeight * dpr);
@@ -295,7 +309,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
       canvas.style.height = `${targetHeight}px`;
     }
     redrawRef.current();
-  }, []);
+  }, [isFullscreen]);
 
   useEffect(() => {
     resizeCanvas();
@@ -311,26 +325,36 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
     redraw();
   }, [redraw]);
 
-  // Bulletproof native touch prevention to stop iOS Safari & Android bounce/pull-to-refresh
+  // Smart native touch handler: allows natural 2-finger scrolling and 1-finger draw/scroll toggle
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const preventDefaultTouch = (e: TouchEvent) => {
-      if (e.target === canvas) {
-        // Stop screen scroll and gesture cancellation
-        if (e.cancelable) {
-          e.preventDefault();
-        }
+    const handleTouchStart = (e: TouchEvent) => {
+      // If user is in scroll mode or uses 2 fingers, allow page to scroll naturally!
+      if (touchModeRef.current === 'scroll' || e.touches.length > 1) {
+        return;
+      }
+      if (e.target === canvas && e.cancelable) {
+        e.preventDefault();
       }
     };
 
-    canvas.addEventListener('touchstart', preventDefaultTouch, { passive: false });
-    canvas.addEventListener('touchmove', preventDefaultTouch, { passive: false });
+    const handleTouchMove = (e: TouchEvent) => {
+      if (touchModeRef.current === 'scroll' || e.touches.length > 1) {
+        return;
+      }
+      if (e.target === canvas && e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
-      canvas.removeEventListener('touchstart', preventDefaultTouch);
-      canvas.removeEventListener('touchmove', preventDefaultTouch);
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
     };
   }, []);
 
@@ -368,6 +392,8 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   };
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    // In scroll mode, don't draw
+    if (touchModeRef.current === 'scroll') return;
     e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -384,6 +410,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (touchModeRef.current === 'scroll') return;
     if (!isDrawing.current) return;
     e.preventDefault();
 
@@ -737,7 +764,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   };
 
   return (
-    <div className="writing-studio-container">
+    <div className={`writing-studio-container ${isFullscreen ? 'is-fullscreen' : ''}`}>
       {/* 1. Main Mode Selector: Harfler vs Kelimeler */}
       <div className="exercise-category-selector-card">
         <div className="exercise-types-tabs">
@@ -909,6 +936,50 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
             ))}
           </div>
         )}
+      </div>
+
+      {/* 2.5 Quick Canvas Mode & Interaction Bar (Draw vs Scroll & Fullscreen) */}
+      <div className="canvas-mode-bar">
+        <div className="touch-mode-pills">
+          <button
+            type="button"
+            className={`touch-mode-pill ${touchMode === 'draw' ? 'active' : ''}`}
+            onClick={() => {
+              soundService.playClick();
+              setTouchMode('draw');
+            }}
+            title="Parmakla veya kalemle çizim yapın"
+          >
+            <PenTool size={13} />
+            <span>✏️ Çizim Yap</span>
+          </button>
+
+          <button
+            type="button"
+            className={`touch-mode-pill ${touchMode === 'scroll' ? 'active' : ''}`}
+            onClick={() => {
+              soundService.playClick();
+              setTouchMode('scroll');
+            }}
+            title="Sayfayı rahatça yukarı ve aşağı kaydırın"
+          >
+            <Hand size={13} />
+            <span>👆 Sayfayı Kaydır</span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className={`btn-fullscreen-toggle ${isFullscreen ? 'active' : ''}`}
+          onClick={() => {
+            soundService.playClick();
+            setIsFullscreen(!isFullscreen);
+          }}
+          title={isFullscreen ? "Normal Boyuta Dön" : "Genişletilmiş Tam Ekran Yazı Tahtası"}
+        >
+          {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+          <span>{isFullscreen ? "Normal Boyut" : "⛶ Geniş Ekran"}</span>
+        </button>
       </div>
 
       {/* 3. Main Interactive Canvas */}
