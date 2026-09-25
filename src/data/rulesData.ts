@@ -1,0 +1,173 @@
+import type { HarekeRule } from '../types';
+
+export const HAREKE_RULES: HarekeRule[] = [
+  {
+    id: 'fetha',
+    name: 'Fetha (Üstün)',
+    turkishName: 'Üstün',
+    symbol: 'َ',
+    symbolSample: 'بَ',
+    description: 'Harfin üzerine konulan eğik çizgidir. İnce harfleri "E", kalın harfleri "A" sesiyle okutur.',
+    soundEffectTr: 'İncelere "E", Kalınlara "A"',
+    examples: [
+      { letter: 'ب', harekeli: 'بَ', reading: 'Be' },
+      { letter: 'ت', harekeli: 'تَ', reading: 'Te' },
+      { letter: 'ث', harekeli: 'ثَ', reading: 'Se' },
+      { letter: 'ج', harekeli: 'جَ', reading: 'Ce' },
+      { letter: 'ح', harekeli: 'حَ', reading: 'Ha (Açık ve ferah)' },
+      { letter: 'خ', harekeli: 'خَ', reading: 'Ha (Kalın ve hırıltılı)' },
+      { letter: 'د', harekeli: 'دَ', reading: 'De' },
+      { letter: 'ر', harekeli: 'رَ', reading: 'Ra (Kalın)' },
+      { letter: 'س', harekeli: 'سَ', reading: 'Se' },
+      { letter: 'ص', harekeli: 'صَ', reading: 'Sa (Dolgun ve kalın)' },
+      { letter: 'ط', harekeli: 'طَ', reading: 'Ta (Tok ve kalın)' },
+      { letter: 'ع', harekeli: 'عَ', reading: '‘A (Boğazdan)' },
+      { letter: 'ف', harekeli: 'فَ', reading: 'Fe' },
+      { letter: 'ق', harekeli: 'قَ', reading: 'Ka (Gırtlaktan kalın)' },
+      { letter: 'ك', harekeli: 'كَ', reading: 'Ke (İnce)' },
+      { letter: 'ل', harekeli: 'لَ', reading: 'Le' },
+      { letter: 'م', harekeli: 'مَ', reading: 'Me' },
+      { letter: 'ن', harekeli: 'نَ', reading: 'Ne' },
+      { letter: 'و', harekeli: 'وَ', reading: 'Ve' },
+      { letter: 'ي', harekeli: 'يَ', reading: 'Ye' }
+    ]
+  },
+  {
+    id: 'kesra',
+    name: 'Kesra (Esre)',
+    turkishName: 'Esre',
+    symbol: 'ِ',
+    symbolSample: 'بِ',
+    description: 'Harfin altına konulan eğik çizgidir. İnce harfleri "İ", kalın harfleri "I - İ" arası bir tonla okutur.',
+    soundEffectTr: 'İncelere "İ", Kalınlara "I"',
+    examples: [
+      { letter: 'ب', harekeli: 'بِ', reading: 'Bi' },
+      { letter: 'ت', harekeli: 'تِ', reading: 'Ti' },
+      { letter: 'ث', harekeli: 'ثِ', reading: 'Si (Peltek)' },
+      { letter: 'ج', harekeli: 'جِ', reading: 'Ci' },
+      { letter: 'ح', harekeli: 'حِ', reading: 'Hı / Hi' },
+      { letter: 'خ', harekeli: 'خِ', reading: 'Hı' },
+      { letter: 'د', harekeli: 'دِ', reading: 'Di' },
+      { letter: 'ر', harekeli: 'رِ', reading: 'Ri (Esrede ince)' },
+      { letter: 'س', harekeli: 'سِ', reading: 'Si' },
+      { letter: 'ص', harekeli: 'صِ', reading: 'Sı (Kalın)' },
+      { letter: 'ط', harekeli: 'طِ', reading: 'Tı (Kalın)' },
+      { letter: 'ع', harekeli: 'عِ', reading: '‘İ' },
+      { letter: 'ف', harekeli: 'فِ', reading: 'Fi' },
+      { letter: 'ق', harekeli: 'قِ', reading: 'Kı' },
+      { letter: 'ك', harekeli: 'كِ', reading: 'Ki' },
+      { letter: 'ل', harekeli: 'لِ', reading: 'Li' },
+      { letter: 'م', harekeli: 'مِ', reading: 'Mi' },
+      { letter: 'ن', harekeli: 'نِ', reading: 'Ni' },
+      { letter: 'و', harekeli: 'وِ', reading: 'Vi' },
+      { letter: 'ي', harekeli: 'يِ', reading: 'Yi' }
+    ]
+  },
+  {
+    id: 'damma',
+    name: 'Damme (Ötre)',
+    turkishName: 'Ötre',
+    symbol: 'ُ',
+    symbolSample: 'بُ',
+    description: 'Harfin üzerine konulan küçük vav şeklindeki işarettir. İnce harfleri "Ü" veya hafif "U", kalın harfleri "U" sesiyle okutur.',
+    soundEffectTr: 'İncelere "Ü / U", Kalınlara "U"',
+    examples: [
+      { letter: 'ب', harekeli: 'بُ', reading: 'Bü' },
+      { letter: 'ت', harekeli: 'تُ', reading: 'Tü' },
+      { letter: 'ث', harekeli: 'ثُ', reading: 'Sü (Peltek)' },
+      { letter: 'ج', harekeli: 'جُ', reading: 'Cü' },
+      { letter: 'ح', harekeli: 'حُ', reading: 'Hu' },
+      { letter: 'خ', harekeli: 'خُ', reading: 'Hu (Kalın)' },
+      { letter: 'د', harekeli: 'دُ', reading: 'Dü' },
+      { letter: 'ر', harekeli: 'رُ', reading: 'Ru (Ötrede kalın)' },
+      { letter: 'س', harekeli: 'سُ', reading: 'Sü' },
+      { letter: 'ص', harekeli: 'صُ', reading: 'Su' },
+      { letter: 'ط', harekeli: 'طُ', reading: 'Tu' },
+      { letter: 'ع', harekeli: 'عُ', reading: '‘U' },
+      { letter: 'ف', harekeli: 'فُ', reading: 'Fü' },
+      { letter: 'ق', harekeli: 'قُ', reading: 'Ku' },
+      { letter: 'ك', harekeli: 'كُ', reading: 'Kü' },
+      { letter: 'ل', harekeli: 'لُ', reading: 'Lü' },
+      { letter: 'م', harekeli: 'مُ', reading: 'Mü' },
+      { letter: 'ن', harekeli: 'نُ', reading: 'Nü' },
+      { letter: 'و', harekeli: 'وُ', reading: 'Vü' },
+      { letter: 'ي', harekeli: 'يُ', reading: 'Yü' }
+    ]
+  },
+  {
+    id: 'sukun',
+    name: 'Sükûn (Cezm)',
+    turkishName: 'Cezm',
+    symbol: 'ْ',
+    symbolSample: 'بْ',
+    description: 'Harfin üzerine konulan küçük yuvarlak veya hilal işarettir. Harfi sessiz yapar ve önceki harekeli harfe bağlar.',
+    soundEffectTr: 'Harfi tutar ve bağlar',
+    examples: [
+      { letter: 'ب', harekeli: 'أَبْ', reading: 'Eb' },
+      { letter: 'ت', harekeli: 'أَتْ', reading: 'Et' },
+      { letter: 'ج', harekeli: 'أَجْ', reading: 'Ec' },
+      { letter: 'د', harekeli: 'قَدْ', reading: 'Kad' },
+      { letter: 'ر', harekeli: 'بَرْ', reading: 'Ber' },
+      { letter: 'س', harekeli: 'بَسْ', reading: 'Bes' },
+      { letter: 'ك', harekeli: 'يَكْ', reading: 'Yek' },
+      { letter: 'ل', harekeli: 'قُلْ', reading: 'Kul' },
+      { letter: 'م', harekeli: 'كَمْ', reading: 'Kem' },
+      { letter: 'ن', harekeli: 'مَنْ', reading: 'Men' },
+      { letter: 'ه', harekeli: 'لَهْ', reading: 'Leh' }
+    ]
+  },
+  {
+    id: 'shedda',
+    name: 'Şedde (Teşdid)',
+    turkishName: 'Şedde',
+    symbol: 'ّ',
+    symbolSample: 'بّ',
+    description: 'Harfin üzerine konan küçük "w" benzeri işarettir. Harfin iki kere art arda (ilki cezimli, ikincisi harekeli) okunmasını sağlar.',
+    soundEffectTr: 'Harfi çiftletir ve vurgular',
+    examples: [
+      { letter: 'ب', harekeli: 'رَبَّ', reading: 'Rabb-e -> Rabbe' },
+      { letter: 'ت', harekeli: 'حَتَّى', reading: 'Hat-tâ -> Hattâ' },
+      { letter: 'د', harekeli: 'مَدَّ', reading: 'Med-de -> Medde' },
+      { letter: 'ر', harekeli: 'مَرَّ', reading: 'Mar-ra -> Marra' },
+      { letter: 'س', harekeli: 'مَسَّ', reading: 'Mes-se -> Messe' },
+      { letter: 'ك', harekeli: 'شَكَّ', reading: 'Şek-ke -> Şekke' },
+      { letter: 'ل', harekeli: 'كُلَّ', reading: 'Kül-le -> Külle' },
+      { letter: 'م', harekeli: 'أُمَّ', reading: 'Üm-me -> Ümme' },
+      { letter: 'ن', harekeli: 'إِنَّ', reading: 'İn-ne -> İnne' }
+    ]
+  },
+  {
+    id: 'tenwin',
+    name: 'Tenvinler (İki Üstün, İki Esre, İki Ötre)',
+    turkishName: 'Tenvin',
+    symbol: 'ً ٍ ٌ',
+    symbolSample: 'بً بِ ٌ',
+    description: 'Kelime sonlarındaki harflere gelen çift harekelerdir. Harfe gizli bir cezimli "N" sesi ekler (-en/-an, -in/-ın, -ün/-un).',
+    soundEffectTr: '-en, -in, -ün sesleri ekler',
+    examples: [
+      { letter: 'ب', harekeli: 'كِتَابًا', reading: 'Kitâben (İki Üstün)' },
+      { letter: 'ب', harekeli: 'كِتَابٍ', reading: 'Kitâbin (İki Esre)' },
+      { letter: 'ب', harekeli: 'كِتَابٌ', reading: 'Kitâbün (İki Ötre)' },
+      { letter: 'م', harekeli: 'عَلِيمًا', reading: 'Alîmen' },
+      { letter: 'م', harekeli: 'عَلِيمٍ', reading: 'Alîmin' },
+      { letter: 'م', harekeli: 'عَلِيمٌ', reading: 'Alîmün' }
+    ]
+  },
+  {
+    id: 'medd',
+    name: 'Med (Uzatma Harfleri: Elif, Vav, Ya)',
+    turkishName: 'Uzatma Harfleri',
+    symbol: 'ا و ي',
+    symbolSample: 'بَا بُو بِي',
+    description: 'Harekeli bir harften sonra gelen hareketsiz Elif, Vav veya Ye harfleri önceki sesi bir elif (bir parmak kaldırıp indirecek) miktarı uzatır.',
+    soundEffectTr: 'Sesi uzatarak akıtır',
+    examples: [
+      { letter: 'ب', harekeli: 'بَا', reading: 'Bâ (Üstünü uzatır)' },
+      { letter: 'ب', harekeli: 'بِي', reading: 'Bî (Esreyi uzatır)' },
+      { letter: 'ب', harekeli: 'بُو', reading: 'Bû (Ötreyi uzatır)' },
+      { letter: 'ن', harekeli: 'نُور', reading: 'Nûr' },
+      { letter: 'ق', harekeli: 'قَالَ', reading: 'Kâle' },
+      { letter: 'د', harekeli: 'دِين', reading: 'Dîn' }
+    ]
+  }
+];
