@@ -153,8 +153,8 @@ export const GamesTab: React.FC<GamesTabProps> = ({
     setUserLetters([]);
     setBuilderComplete(false);
 
-    // Pick 3-letter word
-    const simpleWords = vocabulary.filter(w => w.category === '3harfli' || w.level === 2);
+    // Pick 3-letter word from vocabulary
+    const simpleWords = vocabulary.filter(w => w.category === '3harfli');
     const word = simpleWords[Math.floor(Math.random() * simpleWords.length)] || vocabulary[0];
 
     // Split word's syllables or letters

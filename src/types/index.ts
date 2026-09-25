@@ -52,9 +52,9 @@ export interface VocabularyWord {
   arabic: string;
   transliteration: string;
   meaning: string;
-  category: 'hece' | '3harfli' | 'cezm_sedde' | 'gunluk' | 'kuran';
+  category: '3harfli' | '4harfli' | 'cezm_sedde' | 'gunluk' | 'kuran';
   categoryLabel: string;
-  level: 1 | 2 | 3 | 4;
+  level: 1 | 2 | 3 | 4 | 5;
   syllables: SyllablePart[];
   audioText: string;
 }

@@ -793,7 +793,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
             }}
           >
             <FileText size={18} />
-            <span>Kelime & Hece Yazımı ({vocabulary.length}+ Kelime)</span>
+            <span>Kelime Yazımı ({vocabulary.length}+ Kelime)</span>
           </button>
         </div>
 
@@ -909,8 +909,8 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
           <div className="word-category-chips">
             {[
               { id: 'all', label: 'Tüm Kelimeler' },
-              { id: 'hece', label: '2 Harfli Hece' },
-              { id: '3harfli', label: '3 Harfli Kelime' },
+              { id: '3harfli', label: '3 Harfli Fiil & İsim' },
+              { id: '4harfli', label: '4+ Harfli Kelime' },
               { id: 'cezm_sedde', label: 'Cezm & Şedde' },
               { id: 'gunluk', label: 'Günlük Hayat' },
               { id: 'kuran', label: 'Kur’an' }

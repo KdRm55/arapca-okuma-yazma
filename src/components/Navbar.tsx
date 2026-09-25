@@ -31,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'letters', label: 'Harfler', icon: BookOpen, tag: '29 Harf' },
     { id: 'write', label: 'Yazma Tahtası', icon: Edit3, tag: 'Çizim' },
     { id: 'rules', label: 'Harekeler', icon: Bookmark, tag: 'Kurallar' },
-    { id: 'read', label: 'Okuma & Hece', icon: Layers, tag: 'Örnekler' },
+    { id: 'read', label: 'Kelime Okuma', icon: Layers, tag: 'Örnekler' },
     { id: 'games', label: 'Oyunlar', icon: Gamepad2, tag: '4 Oyun' },
   ] as const;
 

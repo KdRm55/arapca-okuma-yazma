@@ -64,10 +64,10 @@ export const ReadingPracticeTab: React.FC = () => {
             <Sparkles size={16} />
             <span>Çok Örnekli Okuma Kütüphanesi</span>
           </div>
-          <h2 className="hero-title">İnteraktif Arapça Okuma ve Heceleme</h2>
+          <h2 className="hero-title">İnteraktif Arapça Kelime Okuma Rehberi</h2>
           <p className="hero-desc">
-            Harekeli hecelerden başlayıp 3 harfli fiillere, cezmli-şeddeli kelimelerden Kur'an ayet kelimelerine kadar 
-            zengin örnekleri inceleyin. Heceleme moduyla kelimeleri parça parça dinleyebilirsiniz.
+            3 harfli sülâsî fiillerden 4+ harfli zengin kelimelere, cezmli-şeddeli yapılardan Kur'an-ı Kerim ayet kelimelerine kadar 
+            özgün Arapça kelimeleri dinleyin, hecelerine ayırarak inceleyin ve doğru telaffuzu öğrenin.
           </p>
         </div>
       </div>
@@ -179,16 +179,16 @@ export const ReadingPracticeTab: React.FC = () => {
             Tüm Kelimeler ({VOCABULARY_DATA.length})
           </button>
           <button
-            className={`chip-btn ${selectedCategory === 'hece' ? 'active' : ''}`}
-            onClick={() => { soundService.playClick(); setSelectedCategory('hece'); }}
-          >
-            1. Seviye: 2 Harfli Heceler
-          </button>
-          <button
             className={`chip-btn ${selectedCategory === '3harfli' ? 'active' : ''}`}
             onClick={() => { soundService.playClick(); setSelectedCategory('3harfli'); }}
           >
-            2. Seviye: 3 Harfli Kelimeler
+            1. Seviye: 3 Harfli Fiil & İsimler
+          </button>
+          <button
+            className={`chip-btn ${selectedCategory === '4harfli' ? 'active' : ''}`}
+            onClick={() => { soundService.playClick(); setSelectedCategory('4harfli'); }}
+          >
+            2. Seviye: 4+ Harfli Kelimeler
           </button>
           <button
             className={`chip-btn ${selectedCategory === 'cezm_sedde' ? 'active' : ''}`}
