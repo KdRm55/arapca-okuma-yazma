@@ -269,7 +269,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   const redrawRef = useRef<() => void>(() => {});
   redrawRef.current = redraw;
 
-  // Resize canvas when container size changes
+  // Resize canvas when container size changes with mobile-first proportions
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -278,8 +278,12 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    const targetWidth = Math.max(Math.floor(rect.width), 280);
-    const targetHeight = Math.max(Math.floor(Math.min(targetWidth * 0.75, 450)), 300);
+    const isMobile = window.innerWidth < 640;
+    const targetWidth = Math.max(Math.floor(rect.width), 260);
+    // On mobile screens, constrain canvas height so toolbar & check buttons fit in viewport
+    const targetHeight = isMobile
+      ? Math.max(Math.min(Math.floor(targetWidth * 0.58), 240), 200)
+      : Math.max(Math.floor(Math.min(targetWidth * 0.72, 420)), 280);
 
     const pixelW = Math.floor(targetWidth * dpr);
     const pixelH = Math.floor(targetHeight * dpr);
@@ -296,21 +300,54 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
   useEffect(() => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    return () => window.removeEventListener('resize', resizeCanvas);
+    window.addEventListener('orientationchange', resizeCanvas);
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('orientationchange', resizeCanvas);
+    };
   }, [resizeCanvas]);
 
   useEffect(() => {
     redraw();
   }, [redraw]);
 
-  // Get canvas coordinates
-  const getCanvasCoords = (e: React.PointerEvent<HTMLCanvasElement>): Point => {
+  // Bulletproof native touch prevention to stop iOS Safari & Android bounce/pull-to-refresh
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const preventDefaultTouch = (e: TouchEvent) => {
+      if (e.target === canvas) {
+        // Stop screen scroll and gesture cancellation
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    canvas.addEventListener('touchstart', preventDefaultTouch, { passive: false });
+    canvas.addEventListener('touchmove', preventDefaultTouch, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', preventDefaultTouch);
+      canvas.removeEventListener('touchmove', preventDefaultTouch);
+    };
+  }, []);
+
+  // Get canvas coordinates with subpixel DPR and bounding rect compensation
+  const getCanvasCoords = (clientX: number, clientY: number): Point => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    // Subpixel scaling factor between bounding rect and canvas logical dimensions
+    const scaleX = rect.width > 0 ? (canvas.width / dpr) / rect.width : 1;
+    const scaleY = rect.height > 0 ? (canvas.height / dpr) / rect.height : 1;
+
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
     };
   };
 
@@ -341,7 +378,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
     }
 
     isDrawing.current = true;
-    const coord = getCanvasCoords(e);
+    const coord = getCanvasCoords(e.clientX, e.clientY);
     currentStroke.current = [coord];
     drawInstantDot(coord, activeColor, brushWidth, isEraser);
   };
@@ -350,7 +387,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
     if (!isDrawing.current) return;
     e.preventDefault();
 
-    const coord = getCanvasCoords(e);
+    const coord = getCanvasCoords(e.clientX, e.clientY);
     currentStroke.current.push(coord);
 
     const canvas = canvasRef.current;
@@ -892,6 +929,7 @@ export const WritingCanvas: React.FC<WritingCanvasProps> = ({
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
+          onPointerLeave={handlePointerUp}
         />
 
         {/* Floating Quick Action Overlay */}

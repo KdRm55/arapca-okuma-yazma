@@ -68,6 +68,9 @@ html, body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+  overscroll-behavior-y: contain;
 }
 
 button {
@@ -100,8 +103,8 @@ input {
   width: 100%;
   display: flex;
   justify-content: center;
-  /* Extra bottom padding on mobile so content is never blocked by bottom bar */
-  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px) + 24px);
+  /* Generous bottom padding on mobile so content and actions are never blocked by bottom bar */
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 20px) + 50px);
 }
 
 @media (min-width: 900px) {
@@ -392,12 +395,14 @@ input {
 }
 
 .section-hero-card::after {
-  content: "📖";
+  content: "";
   position: absolute;
-  right: -10px;
-  bottom: -20px;
-  font-size: 120px;
-  opacity: 0.08;
+  right: -30px;
+  bottom: -30px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
   pointer-events: none;
 }
 
@@ -903,7 +908,13 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 320px;
+  min-height: 200px;
+}
+
+@media (min-width: 640px) {
+  .canvas-wrapper-outer {
+    min-height: 280px;
+  }
 }
 
 .canvas-badge-tip {
@@ -2896,4 +2907,248 @@ input {
 .btn-retry-action:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+}
+
+/* ==========================================================================
+   MOBILE & TOUCH ENHANCEMENTS (iOS & Android Screen Optimizations)
+   ========================================================================== */
+
+/* Universal Scrollbar Hiding on Mobile Chip Bars */
+.filter-chips-scroll,
+.word-category-chips,
+.position-pills,
+.rules-selector-strip {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-chips-scroll::-webkit-scrollbar,
+.word-category-chips::-webkit-scrollbar,
+.position-pills::-webkit-scrollbar,
+.rules-selector-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent callout popup and long-press selection on touch targets */
+.letter-card,
+.chip-btn,
+.nav-link-btn,
+.bottom-nav-item,
+.tool-mode-btn,
+.stage-btn,
+.exercise-tab-btn,
+.tool-action-btn,
+.interactive-drawing-canvas {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  .main-content-wrapper {
+    padding: 10px 10px;
+  }
+
+  /* Compact Hero Cards on Small Screens */
+  .section-hero-card {
+    padding: 16px 16px;
+    margin-bottom: 14px;
+    border-radius: var(--radius-lg);
+  }
+
+  .hero-title {
+    font-size: 19px;
+    line-height: 1.25;
+  }
+
+  .hero-desc {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+
+  /* Studio / Writing Canvas Compact Header */
+  .exercise-category-selector-card {
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: var(--radius-lg);
+  }
+
+  .exercise-types-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .exercise-tab-btn {
+    padding: 7px 6px;
+    font-size: 11.5px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .exercise-tab-btn span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tracing-stage-pill-box {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .stage-switch-btns {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stage-btn {
+    padding: 6px 4px;
+    font-size: 11px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .studio-header {
+    padding: 10px 12px;
+    border-radius: var(--radius-lg);
+    gap: 8px;
+  }
+
+  .current-letter-badge {
+    padding: 5px 12px;
+  }
+
+  .badge-ar {
+    font-size: 26px;
+  }
+
+  /* Canvas Drawing Toolbar Compact View */
+  .drawing-toolbar {
+    padding: 8px 10px;
+    border-radius: var(--radius-lg);
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .tool-mode-btn {
+    padding: 5px 10px;
+    font-size: 11.5px;
+  }
+
+  .colors-group {
+    gap: 5px;
+  }
+
+  .color-dot {
+    width: 22px;
+    height: 22px;
+  }
+
+  .brush-sizes-group {
+    gap: 5px;
+  }
+
+  .size-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .btn-evaluate {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 13px;
+    order: 10;
+  }
+
+  /* Two Column Alphabet Grid on Mobile */
+  .alphabet-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .letter-card {
+    padding: 10px;
+    border-radius: var(--radius-md);
+  }
+
+  .card-ar-display {
+    min-height: 70px;
+  }
+
+  .ar-char {
+    font-size: 42px;
+  }
+
+  .card-forms-row {
+    padding: 4px 6px;
+    gap: 2px;
+  }
+
+  .form-mini-char {
+    font-size: 13px;
+  }
+
+  .card-actions-row {
+    gap: 4px;
+  }
+
+  .card-action-btn {
+    padding: 5px 6px;
+    font-size: 10.5px;
+    gap: 2px;
+  }
+
+  /* Mobile bottom bar touch spacing */
+  .mobile-bottom-nav {
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .bottom-nav-label {
+    font-size: 9.5px;
+  }
+
+  .bottom-nav-item .nav-icon-wrap {
+    width: 28px;
+    height: 24px;
+  }
+
+  /* Modal on Mobile as Bottom Sheet */
+  .modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal-card-container {
+    max-height: 85dvh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  .modal-header {
+    padding: 14px 18px;
+  }
+
+  .modal-body-scroll {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .four-forms-grid {
+    gap: 6px;
+  }
+
+  .form-card {
+    padding: 8px 4px;
+  }
+
+  .form-glyph {
+    font-size: 26px;
+  }
 }

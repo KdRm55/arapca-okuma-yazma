@@ -4,13 +4,59 @@ class SoundService {
   private audioCtx: AudioContext | null = null;
   private soundEnabled: boolean = true;
   private selectedVoice: SpeechSynthesisVoice | null = null;
+  private isUnlocked: boolean = false;
 
   constructor() {
     this.initVoices();
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        this.initVoices();
+    if (typeof window !== 'undefined') {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          this.initVoices();
+        };
+      }
+
+      // iOS Safari and Android Chrome audio unlock on first user interaction
+      const unlockHandler = () => {
+        this.unlockAudio();
+        window.removeEventListener('touchstart', unlockHandler, true);
+        window.removeEventListener('touchend', unlockHandler, true);
+        window.removeEventListener('click', unlockHandler, true);
       };
+
+      window.addEventListener('touchstart', unlockHandler, { capture: true, passive: true });
+      window.addEventListener('touchend', unlockHandler, { capture: true, passive: true });
+      window.addEventListener('click', unlockHandler, { capture: true, passive: true });
+    }
+  }
+
+  // iOS Safari requires explicit audio context resumption and SpeechSynthesis priming
+  public unlockAudio() {
+    if (this.isUnlocked || typeof window === 'undefined') return;
+    this.isUnlocked = true;
+
+    try {
+      const ctx = this.getAudioContext();
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      // Prime Web Audio with a silent buffer
+      if (ctx) {
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+      }
+      // Prime SpeechSynthesis
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.resume();
+        const dummyUtterance = new SpeechSynthesisUtterance('');
+        dummyUtterance.volume = 0;
+        window.speechSynthesis.speak(dummyUtterance);
+      }
+      this.initVoices();
+    } catch {
+      // Ignore fallback failures
     }
   }
 
